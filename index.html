@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trend-Spotter</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation" data-i18n-attr="aria-label:sidebarAria">
+        <div class="brand">
+          <img class="brand-logo" src="assets/trendspotter-logo.png" alt="TrendSpotter" />
+        </div>
+
+        <nav class="nav-list" aria-label="Sections" data-i18n-attr="aria-label:sectionsAria">
+          <a class="active" href="#dashboard" data-i18n="navRadar">Radar</a>
+          <a href="#signals" data-i18n="navSignals">Signals</a>
+          <a href="#watchlist" data-i18n="navWatchlist">Watchlist</a>
+          <a href="#sources" data-i18n="navSources">Sources</a>
+        </nav>
+
+        <section class="source-panel" id="sources" aria-labelledby="sources-title">
+          <h2 id="sources-title" data-i18n="sourcesTitle">Sources</h2>
+          <label><input type="checkbox" checked data-source="social" /> <span data-i18n="sourceSocial">Social</span></label>
+          <label><input type="checkbox" checked data-source="search" /> <span data-i18n="sourceSearch">Search</span></label>
+          <label><input type="checkbox" checked data-source="commerce" /> <span data-i18n="sourceCommerce">Commerce</span></label>
+          <label><input type="checkbox" checked data-source="news" /> <span data-i18n="sourceNews">News</span></label>
+        </section>
+      </aside>
+
+      <section class="workspace" id="dashboard">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" data-i18n="dashboardEyebrow">Dashboard</p>
+            <h2 data-i18n="heroTitle">Spot trends before they saturate</h2>
+          </div>
+          <div class="topbar-actions">
+            <label class="language-switch">
+              <span class="sr-only" data-i18n="languageLabel">Language</span>
+              <select id="languageSelect" aria-label="Language" data-i18n-attr="aria-label:languageLabel">
+                <option value="en">EN</option>
+                <option value="fr">FR</option>
+                <option value="es">ES</option>
+                <option value="ar">AR</option>
+              </select>
+            </label>
+            <div class="time-window" role="group" aria-label="Time window" data-i18n-attr="aria-label:timeWindowAria">
+              <button class="active" data-window="7">7d</button>
+              <button data-window="30">30d</button>
+              <button data-window="90">90d</button>
+            </div>
+          </div>
+        </header>
+
+        <section class="control-strip" aria-label="Filters" data-i18n-attr="aria-label:filtersAria">
+          <label class="search-box">
+            <span data-i18n="searchLabel">Search</span>
+            <input id="searchInput" type="search" placeholder="Topic, market, signal..." autocomplete="off" data-i18n-attr="placeholder:searchPlaceholder" />
+          </label>
+
+          <label class="select-box">
+            <span data-i18n="categoryLabel">Category</span>
+            <select id="categorySelect">
+              <option value="all" data-i18n="allOption">All</option>
+              <option value="Consumer" data-category-option="Consumer">Consumer</option>
+              <option value="AI" data-category-option="AI">AI</option>
+              <option value="Cybersecurity" data-category-option="Cybersecurity">Cybersecurity</option>
+              <option value="No-Code" data-category-option="No-Code">No-Code</option>
+              <option value="Crypto" data-category-option="Crypto">Crypto</option>
+              <option value="Fintech" data-category-option="Fintech">Fintech</option>
+              <option value="Longevity" data-category-option="Longevity">Longevity</option>
+              <option value="Climate" data-category-option="Climate">Climate</option>
+              <option value="Circular" data-category-option="Circular">Circular</option>
+              <option value="Silver Economy" data-category-option="Silver Economy">Silver Economy</option>
+              <option value="New Work" data-category-option="New Work">New Work</option>
+              <option value="Pet" data-category-option="Pet">Pet</option>
+              <option value="Gaming" data-category-option="Gaming">Gaming</option>
+              <option value="Retail" data-category-option="Retail">Retail</option>
+              <option value="Health" data-category-option="Health">Health</option>
+              <option value="Travel" data-category-option="Travel">Travel</option>
+            </select>
+          </label>
+
+          <label class="select-box">
+            <span data-i18n="priorityLabel">Priority</span>
+            <select id="prioritySelect">
+              <option value="all" data-i18n="allOption">All</option>
+              <option value="high" data-i18n="priorityHigh">High</option>
+              <option value="medium" data-i18n="priorityMedium">Medium</option>
+              <option value="low" data-i18n="priorityLow">Low</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="metric-grid" aria-label="Metrics" data-i18n-attr="aria-label:metricsAria">
+          <article>
+            <span data-i18n="metricActive">Active trends</span>
+            <strong id="activeCount">0</strong>
+          </article>
+          <article>
+            <span data-i18n="metricAverage">Average score</span>
+            <strong id="averageScore">0</strong>
+          </article>
+          <article>
+            <span data-i18n="metricVelocity">Top velocity</span>
+            <strong id="topVelocity">0%</strong>
+          </article>
+          <article>
+            <span data-i18n="metricWatchlist">In watchlist</span>
+            <strong id="watchCount">0</strong>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <div>
+            <div class="section-heading">
+              <h2 id="signals" data-i18n="signalsTitle">Detected signals</h2>
+              <span id="resultCount">0 results</span>
+            </div>
+            <div class="trend-list" id="trendList" aria-live="polite"></div>
+          </div>
+
+          <aside class="insight-panel" aria-labelledby="insight-title">
+            <h2 id="insight-title" data-i18n="insightTitle">Quick read</h2>
+            <div class="opportunity-chart" id="opportunityChart" aria-label="Score distribution" data-i18n-attr="aria-label:scoreDistributionAria"></div>
+            <div class="insight-copy" id="insightCopy"></div>
+          </aside>
+        </section>
+
+        <section class="monetization-panel" id="premium">
+          <div class="premium-copy">
+            <p class="eyebrow">Premium intelligence</p>
+            <h2>Turn live trends into business opportunities.</h2>
+            <p>
+              Get the weekly opportunity brief with niche ideas, source signals, launch angles,
+              and market notes before they become obvious.
+            </p>
+          </div>
+          <form class="email-capture" id="emailCapture">
+            <label>
+              <span>Email</span>
+              <input id="emailInput" type="email" placeholder="you@example.com" required />
+            </label>
+            <button type="submit">Join early access</button>
+            <p id="emailStatus" role="status"></p>
+          </form>
+        </section>
+
+        <section class="business-grid" aria-label="Business model">
+          <article class="pricing-card">
+            <span class="plan-label">Starter</span>
+            <h3>Free</h3>
+            <p>Track a limited set of live signals and explore the weekly public radar.</p>
+            <ul>
+              <li>Live trend cards</li>
+              <li>Basic ranking</li>
+              <li>Limited categories</li>
+            </ul>
+          </article>
+          <article class="pricing-card featured">
+            <span class="plan-label">Premium</span>
+            <h3>$19/mo</h3>
+            <p>Unlock opportunity briefs, alerts, exports, and deeper niche reports.</p>
+            <ul>
+              <li>Weekly opportunity brief</li>
+              <li>Business ideas by trend</li>
+              <li>Watchlist alerts</li>
+            </ul>
+            <button type="button" data-checkout="premium">Start premium</button>
+          </article>
+          <article class="pricing-card">
+            <span class="plan-label">Reports</span>
+            <h3>$49+</h3>
+            <p>Buy focused niche reports for e-commerce, B2B, AI, pet, longevity, and climate.</p>
+            <ul>
+              <li>Market map</li>
+              <li>Launch angles</li>
+              <li>7-day validation plan</li>
+            </ul>
+            <button type="button" data-checkout="reports">Browse reports</button>
+          </article>
+        </section>
+
+        <section class="report-grid" aria-label="Premium reports">
+          <article>
+            <span>Premium report</span>
+            <h3>AI Agent Business Ideas</h3>
+            <p>20 workflow niches, target users, pricing angles, and validation prompts.</p>
+            <button type="button" data-report="AI Agent Business Ideas">Get the report</button>
+          </article>
+          <article>
+            <span>Premium report</span>
+            <h3>Pet Wellness Market Map</h3>
+            <p>Subscription ideas, product bundles, acquisition channels, and margin notes.</p>
+            <button type="button" data-report="Pet Wellness Market Map">Get the report</button>
+          </article>
+          <article>
+            <span>Premium report</span>
+            <h3>Silver Economy Opportunities</h3>
+            <p>Underserved senior care niches, service models, and B2B partnership routes.</p>
+            <button type="button" data-report="Silver Economy Opportunities">Get the report</button>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <script src="src/app.js" type="module"></script>
+  </body>
+</html>

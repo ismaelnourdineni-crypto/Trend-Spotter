@@ -1,0 +1,21 @@
+{
+  "name": "trend-spotter",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A lightweight trend discovery dashboard for spotting emerging topics and opportunities.",
+  "scripts": {
+    "start": "node server.js",
+    "serve": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "trends",
+    "analytics",
+    "dashboard",
+    "watchlist"
+  ],
+  "author": "",
+  "license": "MIT"
+}

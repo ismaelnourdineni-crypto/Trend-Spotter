@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: trendspotter
+    runtime: node
+    plan: starter
+    buildCommand: ""
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PUBLIC_URL
+        value: https://trendspotter.com
+      - key: STRIPE_API_VERSION
+        value: 2026-02-25.clover
