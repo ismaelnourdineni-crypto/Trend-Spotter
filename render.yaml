@@ -9,6 +9,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: PUBLIC_URL
-        value: https://trendspotter.com
+        value: https://gettrendspotter.com
       - key: STRIPE_API_VERSION
         value: 2026-02-25.clover

@@ -38,7 +38,7 @@ STRIPE_SECRET_KEY=sk_test_xxx
 STRIPE_PRICE_ID_PREMIUM=price_xxx
 STRIPE_WEBHOOK_SECRET=whsec_xxx
 RESEND_API_KEY=re_xxx
-EMAIL_FROM=Trend-Spotter <hello@trendspotter.com>
+EMAIL_FROM=TrendSpotter <onboarding@resend.dev>
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=your_server_only_secret_key
 ```
@@ -73,17 +73,17 @@ Keep `SUPABASE_SERVICE_ROLE_KEY` private. It belongs only in `.env` on the serve
 Before going live, update `.env` for the deployed domain:
 
 ```bash
-PUBLIC_URL=https://trendspotter.com
+PUBLIC_URL=https://gettrendspotter.com
 STRIPE_SECRET_KEY=sk_live_xxx
 STRIPE_PRICE_ID_PREMIUM=price_live_xxx
 STRIPE_WEBHOOK_SECRET=whsec_xxx
-EMAIL_FROM=Trend-Spotter <hello@trendspotter.com>
+EMAIL_FROM=TrendSpotter <hello@gettrendspotter.com>
 ```
 
 In Stripe Dashboard, create a webhook endpoint:
 
 ```text
-https://trendspotter.com/api/webhooks/stripe
+https://gettrendspotter.com/api/webhooks/stripe
 ```
 
 Subscribe it to:

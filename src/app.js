@@ -1535,7 +1535,12 @@ async function saveLead(email, report = null) {
   }
 }
 
-async function startCheckout(payload) {
+async function startCheckout(payload, button = null) {
+  const originalLabel = button?.textContent;
+  if (button) {
+    button.disabled = true;
+    button.textContent = "Opening checkout...";
+  }
   try {
     const result = await postJson("/api/checkout", payload);
     if (result.url) {
@@ -1545,6 +1550,11 @@ async function startCheckout(payload) {
     elements.emailStatus.textContent = result.message || "Checkout is not configured yet.";
   } catch {
     elements.emailStatus.textContent = "Checkout needs the app server. Leave your email and we will follow up.";
+  } finally {
+    if (button) {
+      button.disabled = false;
+      button.textContent = originalLabel;
+    }
   }
   elements.emailInput.focus();
   return false;
@@ -1563,9 +1573,10 @@ document.querySelectorAll("[data-report]").forEach((button) => {
   button.addEventListener("click", async () => {
     const selectedReport = button.dataset.report;
     localStorage.setItem("trendSpotterSelectedReport", selectedReport);
-    const didRedirect = await startCheckout({ kind: "report", report: selectedReport });
+    const didRedirect = await startCheckout({ kind: "report", report: selectedReport }, button);
     if (!didRedirect) {
       elements.emailStatus.textContent = `Enter your email to get: ${selectedReport}`;
+      elements.emailForm.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   });
 });
@@ -1573,7 +1584,7 @@ document.querySelectorAll("[data-report]").forEach((button) => {
 document.querySelectorAll("[data-checkout]").forEach((button) => {
   button.addEventListener("click", () => {
     if (button.dataset.checkout === "premium") {
-      startCheckout({ kind: "premium" });
+      startCheckout({ kind: "premium" }, button);
       return;
     }
     document.querySelector("#premium").scrollIntoView({ behavior: "smooth" });
