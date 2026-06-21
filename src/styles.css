@@ -749,6 +749,89 @@ button {
   gap: 12px;
 }
 
+.site-footer {
+  width: min(1160px, 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px 0 6px;
+  color: var(--muted);
+}
+
+.site-footer strong {
+  display: block;
+  color: var(--ink);
+}
+
+.site-footer p {
+  margin: 4px 0 0;
+}
+
+.site-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.site-footer a,
+.legal-card a,
+.legal-back {
+  color: #146b66;
+  font-weight: 800;
+}
+
+.legal-page {
+  min-height: 100vh;
+  padding: 32px;
+  display: grid;
+  place-items: start center;
+  gap: 16px;
+}
+
+.legal-back {
+  width: min(760px, 100%);
+  text-decoration: none;
+}
+
+.legal-card {
+  width: min(760px, 100%);
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: var(--shadow);
+}
+
+.legal-card h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.02;
+}
+
+.legal-card h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.legal-card p {
+  color: #4d5b64;
+  line-height: 1.6;
+}
+
+.legal-card section {
+  display: grid;
+  gap: 6px;
+  margin-top: 22px;
+}
+
+.legal-updated {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
 .checkout-page {
   min-height: 100vh;
   display: grid;
@@ -823,6 +906,11 @@ button {
   .business-grid,
   .report-grid {
     grid-template-columns: 1fr;
+  }
+
+  .site-footer {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .insight-panel {
