@@ -131,20 +131,56 @@
         <section class="monetization-panel" id="premium">
           <div class="premium-copy">
             <p class="eyebrow">Premium intelligence</p>
-            <h2>Turn live trends into business opportunities.</h2>
+            <h2>Turn live trends into validated business opportunities.</h2>
             <p>
-              Get the weekly opportunity brief with niche ideas, source signals, launch angles,
-              and market notes before they become obvious.
+              TrendSpotter Premium translates fast-moving signals into niche ideas,
+              launch angles, watchlist alerts, and weekly opportunity briefs before
+              markets become crowded.
             </p>
+            <div class="premium-trust-row" aria-label="Premium highlights">
+              <span>Secure Stripe checkout</span>
+              <span>Cancel anytime</span>
+              <span>Weekly opportunity brief</span>
+            </div>
           </div>
           <form class="email-capture" id="emailCapture">
             <label>
               <span>Email</span>
               <input id="emailInput" type="email" placeholder="you@example.com" required />
             </label>
-            <button type="submit">Join early access</button>
+            <button type="button" data-checkout="premium">Start Premium</button>
+            <button class="secondary-action" type="submit">Get updates</button>
             <p id="emailStatus" role="status"></p>
           </form>
+        </section>
+
+        <section class="value-grid" aria-labelledby="premium-value-title">
+          <div class="section-heading value-heading">
+            <h2 id="premium-value-title">What Premium unlocks</h2>
+            <span>Built for founders, creators, and operators</span>
+          </div>
+          <div class="value-cards">
+            <article>
+              <span>01</span>
+              <h3>Opportunity briefs</h3>
+              <p>Weekly summaries that turn trend momentum into practical business ideas.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>Signal context</h3>
+              <p>Understand why a trend is moving, where it is spreading, and what to watch next.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>Launch angles</h3>
+              <p>Positioning ideas, audience notes, and first experiments for faster validation.</p>
+            </article>
+            <article>
+              <span>04</span>
+              <h3>Watchlist alerts</h3>
+              <p>Follow categories and signals before they turn into expensive crowded markets.</p>
+            </article>
+          </div>
         </section>
 
         <section class="business-grid" aria-label="Business model">
@@ -161,11 +197,11 @@
           <article class="pricing-card featured">
             <span class="plan-label">Premium</span>
             <h3>$19/mo</h3>
-            <p>Unlock opportunity briefs, alerts, exports, and deeper niche reports.</p>
+            <p>Best for builders validating niches before spending on ads, inventory, or content.</p>
             <ul>
               <li>Weekly opportunity brief</li>
-              <li>Business ideas by trend</li>
-              <li>Watchlist alerts</li>
+              <li>Source-backed signal context</li>
+              <li>Launch angles and watchlist alerts</li>
             </ul>
             <button type="button" data-checkout="premium">Start premium</button>
           </article>
@@ -200,6 +236,21 @@
             <h3>Silver Economy Opportunities</h3>
             <p>Underserved senior care niches, service models, and B2B partnership routes.</p>
             <button type="button" data-report="Silver Economy Opportunities">Get the report</button>
+          </article>
+        </section>
+
+        <section class="faq-grid" aria-label="Premium questions">
+          <article>
+            <h3>Can I cancel?</h3>
+            <p>Yes. Premium is a monthly subscription managed through Stripe.</p>
+          </article>
+          <article>
+            <h3>Is payment secure?</h3>
+            <p>Checkout is handled by Stripe. TrendSpotter never stores card details.</p>
+          </article>
+          <article>
+            <h3>What do I receive?</h3>
+            <p>Premium includes weekly opportunity briefs, market context, and alert-ready ideas.</p>
           </article>
         </section>
 

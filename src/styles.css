@@ -655,6 +655,26 @@ button {
   line-height: 1.5;
 }
 
+.premium-trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.premium-trust-row span {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  border: 1px solid #d7e5e2;
+  border-radius: 999px;
+  padding: 0 10px;
+  background: #eef8f5;
+  color: #146b66;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
 .email-capture {
   display: grid;
   gap: 10px;
@@ -693,11 +713,68 @@ button {
   font-weight: 900;
 }
 
+.email-capture .secondary-action {
+  border: 1px solid var(--line);
+  background: #ffffff;
+  color: var(--ink);
+}
+
 .email-capture p {
   min-height: 20px;
   margin: 0;
   color: var(--green);
   font-weight: 800;
+}
+
+.value-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.value-heading {
+  align-items: end;
+}
+
+.value-cards,
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.value-cards article,
+.faq-grid article {
+  min-height: 160px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: var(--shadow);
+}
+
+.value-cards span {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0 10px;
+  background: #eef8f5;
+  color: #146b66;
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.value-cards h3,
+.faq-grid h3 {
+  margin: 16px 0 8px;
+  font-size: 1.1rem;
+}
+
+.value-cards p,
+.faq-grid p {
+  margin: 0;
+  color: #4d5b64;
+  line-height: 1.45;
 }
 
 .business-grid,
@@ -747,6 +824,14 @@ button {
 .report-grid article {
   display: grid;
   gap: 12px;
+}
+
+.faq-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.faq-grid article {
+  min-height: 130px;
 }
 
 .site-footer {
@@ -903,7 +988,9 @@ button {
   }
 
   .monetization-panel,
+  .value-cards,
   .business-grid,
+  .faq-grid,
   .report-grid {
     grid-template-columns: 1fr;
   }
