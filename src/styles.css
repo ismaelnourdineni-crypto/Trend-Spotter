@@ -826,6 +826,11 @@ button {
   gap: 12px;
 }
 
+.report-price {
+  color: var(--ink);
+  font-size: 1rem;
+}
+
 .faq-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }

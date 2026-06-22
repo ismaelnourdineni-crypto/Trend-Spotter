@@ -1587,7 +1587,7 @@ document.querySelectorAll("[data-checkout]").forEach((button) => {
       startCheckout({ kind: "premium" }, button);
       return;
     }
-    document.querySelector("#premium").scrollIntoView({ behavior: "smooth" });
+    document.querySelector("#reports").scrollIntoView({ behavior: "smooth", block: "start" });
   });
 });
 
