@@ -19,6 +19,7 @@ const translations = {
     heroTitle: "Spot trends before they saturate",
     timeWindowAria: "Time window",
     filtersAria: "Filters",
+    categoryStripAria: "Signal categories",
     searchLabel: "Search",
     searchPlaceholder: "Topic, market, signal...",
     categoryLabel: "Category",
@@ -113,6 +114,7 @@ const translations = {
     heroTitle: "Reperer les tendances avant saturation",
     timeWindowAria: "Periode",
     filtersAria: "Filtres",
+    categoryStripAria: "Catégories de signaux",
     searchLabel: "Recherche",
     searchPlaceholder: "Sujet, marche, signal...",
     categoryLabel: "Categorie",
@@ -207,6 +209,7 @@ const translations = {
     heroTitle: "Detecta tendencias antes de la saturacion",
     timeWindowAria: "Periodo",
     filtersAria: "Filtros",
+    categoryStripAria: "Categorías de señales",
     searchLabel: "Buscar",
     searchPlaceholder: "Tema, mercado, senal...",
     categoryLabel: "Categoria",
@@ -301,6 +304,7 @@ const translations = {
     heroTitle: "اكتشف الاتجاهات قبل التشبع",
     timeWindowAria: "الفترة الزمنية",
     filtersAria: "الفلاتر",
+    categoryStripAria: "فئات الإشارات",
     searchLabel: "بحث",
     searchPlaceholder: "موضوع، سوق، اشارة...",
     categoryLabel: "الفئة",
@@ -1082,6 +1086,7 @@ const elements = {
   priority: document.querySelector("#prioritySelect"),
   sourceInputs: document.querySelectorAll("[data-source]"),
   windowButtons: document.querySelectorAll("[data-window]"),
+  categoryChips: document.querySelectorAll("[data-category-chip]"),
   list: document.querySelector("#trendList"),
   resultCount: document.querySelector("#resultCount"),
   activeCount: document.querySelector("#activeCount"),
@@ -1242,6 +1247,11 @@ function localizeStaticContent() {
 
   document.querySelectorAll("[data-category-option]").forEach((node) => {
     node.textContent = categoryLabel(node.dataset.categoryOption);
+  });
+
+  elements.categoryChips.forEach((button) => {
+    const category = button.dataset.categoryChip;
+    button.textContent = category === "all" ? t("allOption") : categoryLabel(category);
   });
 
   document.querySelectorAll("[data-i18n-attr]").forEach((node) => {
@@ -1433,6 +1443,10 @@ function render() {
   const filtered = getFilteredTrends();
   elements.list.innerHTML = "";
 
+  elements.categoryChips.forEach((button) => {
+    button.classList.toggle("active", button.dataset.categoryChip === state.category);
+  });
+
   if (!filtered.length) {
     const empty = document.createElement("div");
     empty.className = "empty-state";
@@ -1466,6 +1480,14 @@ elements.search.addEventListener("input", (event) => {
 elements.category.addEventListener("change", (event) => {
   state.category = event.target.value;
   render();
+});
+
+elements.categoryChips.forEach((button) => {
+  button.addEventListener("click", () => {
+    state.category = button.dataset.categoryChip;
+    elements.category.value = state.category;
+    render();
+  });
 });
 
 elements.priority.addEventListener("change", (event) => {
