@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your TrendSpotter Report</title>
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body class="report-page">
+    <main class="report-shell">
+      <a class="legal-back" href="/">Back to dashboard</a>
+      <section class="report-card" aria-live="polite">
+        <div class="report-brand">
+          <img src="assets/trendspotter-logo.png" alt="TrendSpotter" />
+        </div>
+        <p class="eyebrow">TrendSpotter Report</p>
+        <h1 id="reportTitle">Loading your report...</h1>
+        <p id="reportSummary" class="report-muted">
+          We are verifying your payment and preparing your private report.
+        </p>
+
+        <div id="reportContent" class="report-content" hidden>
+          <section class="report-section">
+            <h2>Who this is for</h2>
+            <p id="reportAudience"></p>
+          </section>
+
+          <section class="report-section">
+            <h2>What you get</h2>
+            <ul id="reportSections" class="report-list"></ul>
+          </section>
+
+          <div class="report-section-grid">
+            <section class="report-section">
+              <h2>Market map</h2>
+              <ul id="reportMarketMap" class="report-list"></ul>
+            </section>
+
+            <section class="report-section">
+              <h2>Launch angles</h2>
+              <ul id="reportLaunchAngles" class="report-list"></ul>
+            </section>
+          </div>
+
+          <section class="report-section">
+            <h2>7-day validation plan</h2>
+            <ol id="reportValidationPlan" class="report-list report-plan"></ol>
+          </section>
+
+          <section class="report-next-step">
+            <p class="eyebrow">Recommended next step</p>
+            <p id="reportNextStep"></p>
+          </section>
+        </div>
+
+        <div class="report-actions">
+          <a href="/" class="secondary-link">Open TrendSpotter</a>
+          <button id="printReport" type="button">Print or save PDF</button>
+        </div>
+      </section>
+    </main>
+    <script src="src/report.js" defer></script>
+  </body>
+</html>

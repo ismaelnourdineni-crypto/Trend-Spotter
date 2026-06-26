@@ -11,7 +11,7 @@ Trend-Spotter is a lightweight trend discovery dashboard. It tracks emerging top
 - Premium positioning with pricing cards and report CTAs
 - Local email capture endpoint
 - Optional Stripe Checkout endpoint for premium subscriptions and reports
-- Checkout success/cancel pages, local purchase recording, and Resend purchase emails
+- Checkout success/cancel pages, local purchase recording, Resend purchase emails, and private report delivery links
 
 ## Run locally
 
@@ -37,6 +37,7 @@ PUBLIC_URL=http://127.0.0.1:4199
 STRIPE_SECRET_KEY=sk_test_xxx
 STRIPE_PRICE_ID_PREMIUM=price_xxx
 STRIPE_WEBHOOK_SECRET=whsec_xxx
+REPORT_ACCESS_SECRET=change_me_to_a_long_random_secret
 RESEND_API_KEY=re_xxx
 EMAIL_FROM=TrendSpotter <onboarding@resend.dev>
 SUPABASE_URL=https://your-project.supabase.co
@@ -45,7 +46,7 @@ SUPABASE_SERVICE_ROLE_KEY=your_server_only_secret_key
 
 Without Stripe variables, checkout buttons fall back to email capture. Without Supabase variables or tables, leads are stored locally in `data/leads.json`; completed checkouts are stored locally in `data/purchases.json`.
 
-Without `RESEND_API_KEY`, purchases are still recorded but no confirmation email is sent. Set `EMAIL_FROM` to a verified Resend sender before going live. Report purchases send a report delivery email with the selected report summary and next step.
+Without `RESEND_API_KEY`, purchases are still recorded but no confirmation email is sent. Set `EMAIL_FROM` to a verified Resend sender before going live. Report purchases send a report delivery email with the selected report summary, next step, and a private signed report link. Set `REPORT_ACCESS_SECRET` to a long random production value so report links cannot be guessed.
 
 Stripe success and cancellation redirects use:
 
@@ -77,6 +78,7 @@ PUBLIC_URL=https://gettrendspotter.com
 STRIPE_SECRET_KEY=sk_live_xxx
 STRIPE_PRICE_ID_PREMIUM=price_live_xxx
 STRIPE_WEBHOOK_SECRET=whsec_xxx
+REPORT_ACCESS_SECRET=change_me_to_a_long_random_secret
 EMAIL_FROM=TrendSpotter <hello@gettrendspotter.com>
 ```
 
@@ -96,6 +98,15 @@ Copy the endpoint signing secret (`whsec_...`) into `STRIPE_WEBHOOK_SECRET`.
 
 In Resend, verify your sending domain, then replace `EMAIL_FROM` with an address on that verified domain. Keep `onboarding@resend.dev` only for local testing.
 
+Report purchases are delivered through:
+
+```text
+GET /report.html?session_id={CHECKOUT_SESSION_ID}&token={SIGNED_TOKEN}
+GET /api/report?session_id={CHECKOUT_SESSION_ID}&token={SIGNED_TOKEN}
+```
+
+The API checks the signed token and retrieves the Stripe Checkout session before returning report content.
+
 ## Project structure
 
 ```text
@@ -106,6 +117,7 @@ In Resend, verify your sending domain, then replace `EMAIL_FROM` with an address
 ├── server.js
 ├── src
 │   ├── app.js
+│   ├── report.js
 │   └── styles.css
 ├── package.json
 └── README.md

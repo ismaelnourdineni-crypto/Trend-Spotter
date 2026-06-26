@@ -34,35 +34,97 @@ const supabaseUrl = (process.env.SUPABASE_URL || "").replace(/\/$/, "");
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const resendApiKey = process.env.RESEND_API_KEY || "";
 const emailFrom = process.env.EMAIL_FROM || "Trend-Spotter <onboarding@resend.dev>";
+const reportAccessSecret =
+  process.env.REPORT_ACCESS_SECRET || stripeWebhookSecret || process.env.STRIPE_SECRET_KEY || "trendspotter-local-report-secret";
 
 const reportDeliverables = {
   "AI Agent Business Ideas": {
     title: "AI Agent Business Ideas",
     summary: "A focused opportunity pack for builders looking for practical AI automation businesses.",
+    audience: "Solo founders, consultants, and small B2B teams looking for automation niches with clear buyer pain.",
     sections: [
       "20 B2B workflow niches with buyer pain points",
       "Target users, pricing angles, and urgency triggers",
       "Validation prompts you can use with prospects this week"
+    ],
+    marketMap: [
+      "Back-office automation for agencies: reporting, billing checks, proposal drafts, and client follow-ups.",
+      "Operations assistants for local service businesses: quote creation, appointment reminders, inventory alerts, and review replies.",
+      "Compliance-lite workflows for regulated small teams: document intake, audit trails, risk flags, and weekly summaries."
+    ],
+    launchAngles: [
+      "Lead with a narrow outcome: save five hours per week on one repetitive workflow.",
+      "Sell a done-with-you setup package first, then convert recurring users into a monthly monitoring plan.",
+      "Use before/after workflow demos instead of broad AI messaging; buyers should see the task disappear."
+    ],
+    validationPlan: [
+      "Day 1: Choose one workflow and write the painful manual steps.",
+      "Day 2: Interview three operators who run that workflow weekly.",
+      "Day 3: Build a no-code or scripted demo using sample inputs.",
+      "Day 4: Ask prospects to rank time saved, error reduction, and revenue impact.",
+      "Day 5: Price the first offer as setup plus monthly support.",
+      "Day 6: Send a short demo video to ten target buyers.",
+      "Day 7: Keep only the angle that gets replies, objections, or booked calls."
     ],
     nextStep: "Pick one workflow niche, interview three target users, and validate whether the workflow saves time, reduces errors, or creates revenue."
   },
   "Pet Wellness Market Map": {
     title: "Pet Wellness Market Map",
     summary: "A market map for pet wellness offers, subscriptions, bundles, and acquisition angles.",
+    audience: "E-commerce operators, subscription brands, and pet-care founders exploring higher-margin wellness offers.",
     sections: [
       "Subscription and product bundle concepts",
       "Channel angles for pet parents and specialist communities",
       "Margin notes and validation questions for early offers"
+    ],
+    marketMap: [
+      "Gut, skin, and anxiety bundles for dogs with simple education and repeat-purchase cadence.",
+      "Senior pet support: mobility, pain comfort, nutrition reminders, and vet-visit preparation kits.",
+      "Breed or lifestyle-specific packs for owners who want more tailored advice than generic pet aisles."
+    ],
+    launchAngles: [
+      "Package the offer around a visible owner worry: scratching, stress, aging, digestion, or energy.",
+      "Partner with groomers, trainers, and small vets for trust-driven acquisition.",
+      "Use a starter kit plus subscription refill model to avoid selling single low-margin products."
+    ],
+    validationPlan: [
+      "Day 1: Pick one pet-owner pain and define the measurable before/after.",
+      "Day 2: Scan forums, reviews, and communities for repeated complaints.",
+      "Day 3: Create a landing page with one bundle and three proof points.",
+      "Day 4: Ask 10 owners what they already tried and why it failed.",
+      "Day 5: Test two price anchors: starter kit and monthly refill.",
+      "Day 6: Collect email signups with pet age, breed, and main concern.",
+      "Day 7: Pre-sell a small batch or run a concierge pilot."
     ],
     nextStep: "Choose one pet wellness bundle, define the owner pain point, and test demand with a simple waitlist or pre-order page."
   },
   "Silver Economy Opportunities": {
     title: "Silver Economy Opportunities",
     summary: "A concise opportunity pack for senior care, longevity, and support services.",
+    audience: "Founders targeting older adults, caregivers, senior living operators, and family decision-makers.",
     sections: [
       "Underserved senior care niches",
       "Service models for families, operators, and B2B partners",
       "Partnership routes and validation questions"
+    ],
+    marketMap: [
+      "Care coordination for families managing appointments, documents, medication notes, and check-ins.",
+      "Independence services: home safety audits, mobility support, simplified tech setup, and local assistance.",
+      "Longevity education and habit programs for active retirees who want prevention, not only care."
+    ],
+    launchAngles: [
+      "Sell reassurance to families, not just convenience to seniors.",
+      "Start with a human-assisted service before building software around repeated tasks.",
+      "Use local trust channels: pharmacies, clinics, community centers, and senior residences."
+    ],
+    validationPlan: [
+      "Day 1: Pick one stressful family-care scenario.",
+      "Day 2: Interview caregivers about what breaks down each week.",
+      "Day 3: Map the current workaround and the person who pays.",
+      "Day 4: Offer a manual concierge version to three families.",
+      "Day 5: Test whether operators or families value the service more.",
+      "Day 6: Draft a referral partnership pitch for one local channel.",
+      "Day 7: Keep the offer only if it reduces stress, saves time, or prevents missed care."
     ],
     nextStep: "Start with one narrow care or support scenario, then validate it with caregivers, senior living operators, or family decision-makers."
   }
@@ -280,6 +342,7 @@ function buildPurchaseEmail(payload) {
   const report = reportDeliverables[payload.report] || null;
   const product = report?.title || payload.report || (isSubscription ? "Premium subscription" : "Trend-Spotter report");
   const safeProduct = escapeHtml(product);
+  const reportUrl = report && payload.sessionId ? buildReportAccessUrl(payload.sessionId) : "";
   const subject = isSubscription
     ? "Your TrendSpotter Premium access is active"
     : `Your TrendSpotter report is ready: ${product}`;
@@ -293,7 +356,12 @@ function buildPurchaseEmail(payload) {
         <ul style="margin:0 0 14px;padding-left:20px;">
           ${report.sections.map((section) => `<li>${escapeHtml(section)}</li>`).join("")}
         </ul>
-        <p style="margin:0;"><strong>Next step:</strong> ${escapeHtml(report.nextStep)}</p>
+        <p style="margin:0 0 16px;"><strong>Next step:</strong> ${escapeHtml(report.nextStep)}</p>
+        ${
+          reportUrl
+            ? `<p style="margin:0;"><a href="${reportUrl}" style="display:inline-block;background:#15212b;color:#ffffff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700;">Open your full report</a></p>`
+            : ""
+        }
       </div>
     `
     : "";
@@ -301,7 +369,7 @@ function buildPurchaseEmail(payload) {
   const headline = isSubscription ? "Your Premium access is active." : "Your report is ready.";
   const intro = isSubscription
     ? "Your payment is confirmed and your TrendSpotter Premium access is active."
-    : "Your payment is confirmed. Your report summary is below, and we will use this format for the full report delivery flow.";
+    : "Your payment is confirmed. Your report summary is below, and your private report link is ready.";
 
   const html = `
     <div style="font-family:Arial,sans-serif;line-height:1.6;color:#14212b;max-width:620px;margin:0 auto;padding:28px;">
@@ -444,6 +512,56 @@ async function retrieveCheckoutSession(sessionId) {
   };
 }
 
+function reportTokenForSession(sessionId) {
+  return crypto.createHmac("sha256", reportAccessSecret).update(String(sessionId || "")).digest("hex").slice(0, 32);
+}
+
+function buildReportAccessUrl(sessionId) {
+  const token = reportTokenForSession(sessionId);
+  return `${publicUrl}/report.html?session_id=${encodeURIComponent(sessionId)}&token=${encodeURIComponent(token)}`;
+}
+
+function serializeReport(report) {
+  return {
+    title: report.title,
+    summary: report.summary,
+    audience: report.audience,
+    sections: report.sections,
+    marketMap: report.marketMap,
+    launchAngles: report.launchAngles,
+    validationPlan: report.validationPlan,
+    nextStep: report.nextStep
+  };
+}
+
+async function retrieveReport(sessionId, token) {
+  if (!sessionId || !token) {
+    return { ok: false, message: "Missing report access details." };
+  }
+
+  const expectedToken = reportTokenForSession(sessionId);
+  if (!timingSafeEqual(expectedToken, token)) {
+    return { ok: false, message: "This report link is invalid." };
+  }
+
+  const checkout = await retrieveCheckoutSession(sessionId);
+  if (!checkout.ok) return checkout;
+  if (checkout.mode !== "payment") {
+    return { ok: false, message: "This purchase is not a report order." };
+  }
+
+  const report = reportDeliverables[checkout.report];
+  if (!report) {
+    return { ok: false, message: "We could not find the report for this purchase." };
+  }
+
+  return {
+    ok: true,
+    customerEmail: checkout.customerEmail,
+    report: serializeReport(report)
+  };
+}
+
 function timingSafeEqual(left, right) {
   const leftBuffer = Buffer.from(left);
   const rightBuffer = Buffer.from(right);
@@ -527,6 +645,12 @@ const server = http.createServer(async (request, response) => {
     if (request.method === "GET" && request.url.startsWith("/api/checkout-session")) {
       const url = new URL(request.url, publicUrl);
       sendJson(response, 200, await retrieveCheckoutSession(url.searchParams.get("session_id")));
+      return;
+    }
+
+    if (request.method === "GET" && request.url.startsWith("/api/report")) {
+      const url = new URL(request.url, publicUrl);
+      sendJson(response, 200, await retrieveReport(url.searchParams.get("session_id"), url.searchParams.get("token")));
       return;
     }
 
