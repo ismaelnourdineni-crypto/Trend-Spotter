@@ -35,6 +35,39 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 const resendApiKey = process.env.RESEND_API_KEY || "";
 const emailFrom = process.env.EMAIL_FROM || "Trend-Spotter <onboarding@resend.dev>";
 
+const reportDeliverables = {
+  "AI Agent Business Ideas": {
+    title: "AI Agent Business Ideas",
+    summary: "A focused opportunity pack for builders looking for practical AI automation businesses.",
+    sections: [
+      "20 B2B workflow niches with buyer pain points",
+      "Target users, pricing angles, and urgency triggers",
+      "Validation prompts you can use with prospects this week"
+    ],
+    nextStep: "Pick one workflow niche, interview three target users, and validate whether the workflow saves time, reduces errors, or creates revenue."
+  },
+  "Pet Wellness Market Map": {
+    title: "Pet Wellness Market Map",
+    summary: "A market map for pet wellness offers, subscriptions, bundles, and acquisition angles.",
+    sections: [
+      "Subscription and product bundle concepts",
+      "Channel angles for pet parents and specialist communities",
+      "Margin notes and validation questions for early offers"
+    ],
+    nextStep: "Choose one pet wellness bundle, define the owner pain point, and test demand with a simple waitlist or pre-order page."
+  },
+  "Silver Economy Opportunities": {
+    title: "Silver Economy Opportunities",
+    summary: "A concise opportunity pack for senior care, longevity, and support services.",
+    sections: [
+      "Underserved senior care niches",
+      "Service models for families, operators, and B2B partners",
+      "Partnership routes and validation questions"
+    ],
+    nextStep: "Start with one narrow care or support scenario, then validate it with caregivers, senior living operators, or family decision-makers."
+  }
+};
+
 const mimeTypes = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
@@ -201,6 +234,15 @@ async function savePurchase(payload) {
   await fs.writeFile(filePath, JSON.stringify(purchases, null, 2));
 }
 
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 async function hasSentPurchaseEmail(sessionId) {
   if (!sessionId) return false;
 
@@ -235,16 +277,38 @@ async function markPurchaseEmailSent(sessionId) {
 
 function buildPurchaseEmail(payload) {
   const isSubscription = payload.mode === "subscription";
-  const product = payload.report || (isSubscription ? "Premium subscription" : "Trend-Spotter report");
+  const report = reportDeliverables[payload.report] || null;
+  const product = report?.title || payload.report || (isSubscription ? "Premium subscription" : "Trend-Spotter report");
+  const safeProduct = escapeHtml(product);
   const subject = isSubscription
-    ? "Your Trend-Spotter Premium access is active"
-    : `Your Trend-Spotter report is confirmed: ${product}`;
+    ? "Your TrendSpotter Premium access is active"
+    : `Your TrendSpotter report is ready: ${product}`;
+
+  const reportHtml = report
+    ? `
+      <div style="background:#eef8f5;border:1px solid #cfe2df;border-radius:12px;padding:18px;margin:22px 0;">
+        <p style="margin:0 0 10px;color:#6a7680;font-size:12px;font-weight:800;letter-spacing:0;text-transform:uppercase;">Report delivery</p>
+        <h2 style="font-size:22px;margin:0 0 10px;">${escapeHtml(report.title)}</h2>
+        <p style="margin:0 0 14px;">${escapeHtml(report.summary)}</p>
+        <ul style="margin:0 0 14px;padding-left:20px;">
+          ${report.sections.map((section) => `<li>${escapeHtml(section)}</li>`).join("")}
+        </ul>
+        <p style="margin:0;"><strong>Next step:</strong> ${escapeHtml(report.nextStep)}</p>
+      </div>
+    `
+    : "";
+
+  const headline = isSubscription ? "Your Premium access is active." : "Your report is ready.";
+  const intro = isSubscription
+    ? "Your payment is confirmed and your TrendSpotter Premium access is active."
+    : "Your payment is confirmed. Your report summary is below, and we will use this format for the full report delivery flow.";
 
   const html = `
     <div style="font-family:Arial,sans-serif;line-height:1.6;color:#14212b;max-width:620px;margin:0 auto;padding:28px;">
-      <h1 style="font-size:28px;margin:0 0 16px;">Welcome to Trend-Spotter Premium</h1>
-      <p>Your payment is confirmed and your access is being activated.</p>
-      <p><strong>Purchase:</strong> ${product}</p>
+      <h1 style="font-size:28px;margin:0 0 16px;">${headline}</h1>
+      <p>${intro}</p>
+      <p><strong>Purchase:</strong> ${safeProduct}</p>
+      ${reportHtml}
       <p>You can return to your dashboard here:</p>
       <p><a href="${publicUrl}" style="display:inline-block;background:#15212b;color:#ffffff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700;">Open Trend-Spotter</a></p>
       <p style="color:#5b6975;font-size:14px;">If you did not expect this email, reply to this message and we will help.</p>

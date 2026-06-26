@@ -11,7 +11,7 @@ Trend-Spotter is a lightweight trend discovery dashboard. It tracks emerging top
 - Premium positioning with pricing cards and report CTAs
 - Local email capture endpoint
 - Optional Stripe Checkout endpoint for premium subscriptions and reports
-- Checkout success/cancel pages and local purchase recording
+- Checkout success/cancel pages, local purchase recording, and Resend purchase emails
 
 ## Run locally
 
@@ -45,7 +45,7 @@ SUPABASE_SERVICE_ROLE_KEY=your_server_only_secret_key
 
 Without Stripe variables, checkout buttons fall back to email capture. Without Supabase variables or tables, leads are stored locally in `data/leads.json`; completed checkouts are stored locally in `data/purchases.json`.
 
-Without `RESEND_API_KEY`, purchases are still recorded but no confirmation email is sent. Set `EMAIL_FROM` to a verified Resend sender before going live.
+Without `RESEND_API_KEY`, purchases are still recorded but no confirmation email is sent. Set `EMAIL_FROM` to a verified Resend sender before going live. Report purchases send a report delivery email with the selected report summary and next step.
 
 Stripe success and cancellation redirects use:
 
